@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'constants/text_styles_value.dart';
 
 class UserInfoPage extends StatelessWidget {
 
@@ -6,7 +8,8 @@ class UserInfoPage extends StatelessWidget {
   final String email;
   final String phone;
 
-  UserInfoPage({
+  const UserInfoPage({
+    super.key,
     required this.name,
     required this.email,
     required this.phone,
@@ -14,25 +17,19 @@ class UserInfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        title: Text("User Information"),
+        title: Text("user_info".tr()),
       ),
-
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-
-            Text("Name: $name", style: TextStyle(fontSize: 20)),
-            SizedBox(height: 10),
-
-            Text("Email: $email", style: TextStyle(fontSize: 20)),
-            SizedBox(height: 10),
-
-            Text("Phone: $phone", style: TextStyle(fontSize: 20)),
-
+            Text("${"name".tr()}: $name", style: AppTextStyles.body),
+            const SizedBox(height: 10),
+            Text("${"email".tr()}: $email", style: AppTextStyles.body),
+            const SizedBox(height: 10),
+            Text("${"phone".tr()}: $phone", style: AppTextStyles.body),
           ],
         ),
       ),

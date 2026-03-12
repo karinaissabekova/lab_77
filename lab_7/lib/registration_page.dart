@@ -1,72 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'user_info_page.dart';
+import 'constants/colors.dart';
+import 'constants/text_styles_value.dart';
 
 class RegistrationPage extends StatefulWidget {
+  const RegistrationPage({super.key});
+
   @override
-  _RegistrationPageState createState() => _RegistrationPageState();
+  State<RegistrationPage> createState() => _RegistrationPageState();
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  // Controllers
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
+  final confirmController = TextEditingController();
 
-  // Focus Nodes
   final nameFocus = FocusNode();
   final emailFocus = FocusNode();
   final phoneFocus = FocusNode();
   final passwordFocus = FocusNode();
-  final confirmPasswordFocus = FocusNode();
+  final confirmFocus = FocusNode();
 
-  bool obscurePassword = true;
+  bool obscure = true;
   bool obscureConfirm = true;
 
   @override
-  void dispose() {
-    nameController.dispose();
-    emailController.dispose();
-    phoneController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
-
-    nameFocus.dispose();
-    emailFocus.dispose();
-    phoneFocus.dispose();
-    passwordFocus.dispose();
-    confirmPasswordFocus.dispose();
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(title: Text("Registration")),
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        title: Text("registration".tr()),
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.setLocale(const Locale('en'));
+            },
+            icon: const Text("EN"),
+          ),
+          IconButton(
+            onPressed: () {
+              context.setLocale(const Locale('ru'));
+            },
+            icon: const Text("RU"),
+          ),
+        ],
+      ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: ListView(
             children: [
 
-              // NAME
+              const SizedBox(height: 20),
+
               TextFormField(
                 controller: nameController,
                 focusNode: nameFocus,
                 decoration: InputDecoration(
-                  labelText: "Name",
-                  border: OutlineInputBorder(),
+                  labelText: "name".tr(),
+                  border: const OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return "Name cannot be empty";
+                    return "name_error".tr();
                   }
                   return null;
                 },
@@ -76,28 +79,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 },
               ),
 
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
 
-              // EMAIL
               TextFormField(
                 controller: emailController,
                 focusNode: emailFocus,
                 decoration: InputDecoration(
-                  labelText: "Email",
-                  border: OutlineInputBorder(),
+                  labelText: "email".tr(),
+                  border: const OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return "Email cannot be empty";
+                    return "email_error".tr();
                   }
-
-                  final emailRegex =
-                      RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$');
-
-                  if (!emailRegex.hasMatch(value)) {
-                    return "Enter a valid email";
-                  }
-
                   return null;
                 },
                 textInputAction: TextInputAction.next,
@@ -106,27 +100,23 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 },
               ),
 
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
 
-              // PHONE
               TextFormField(
                 controller: phoneController,
                 focusNode: phoneFocus,
-                decoration: InputDecoration(
-                  labelText: "Phone Number",
-                  border: OutlineInputBorder(),
-                ),
                 keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: "phone".tr(),
+                  border: const OutlineInputBorder(),
+                ),
                 validator: (value) {
-
                   if (value == null || value.isEmpty) {
-                    return "Phone cannot be empty";
+                    return "phone_error".tr();
                   }
-
                   if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                    return "Only digits allowed";
+                    return "phone_error".tr();
                   }
-
                   return null;
                 },
                 textInputAction: TextInputAction.next,
@@ -135,63 +125,47 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 },
               ),
 
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
 
-              // PASSWORD
               TextFormField(
                 controller: passwordController,
                 focusNode: passwordFocus,
-                obscureText: obscurePassword,
+                obscureText: obscure,
                 decoration: InputDecoration(
-                  labelText: "Password",
-                  border: OutlineInputBorder(),
+                  labelText: "password".tr(),
+                  border: const OutlineInputBorder(),
                   suffixIcon: IconButton(
-                    icon: Icon(
-                        obscurePassword
-                            ? Icons.visibility
-                            : Icons.visibility_off
-                    ),
+                    icon: Icon(obscure ? Icons.visibility : Icons.visibility_off),
                     onPressed: () {
                       setState(() {
-                        obscurePassword = !obscurePassword;
+                        obscure = !obscure;
                       });
                     },
                   ),
                 ),
                 validator: (value) {
-
-                  if (value == null || value.isEmpty) {
-                    return "Password cannot be empty";
+                  if (value == null || value.length < 6) {
+                    return "password_error".tr();
                   }
-
-                  if (value.length < 6) {
-                    return "Password must be at least 6 characters";
-                  }
-
                   return null;
                 },
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
-                  FocusScope.of(context).requestFocus(confirmPasswordFocus);
+                  FocusScope.of(context).requestFocus(confirmFocus);
                 },
               ),
 
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
 
-              // CONFIRM PASSWORD
               TextFormField(
-                controller: confirmPasswordController,
-                focusNode: confirmPasswordFocus,
+                controller: confirmController,
+                focusNode: confirmFocus,
                 obscureText: obscureConfirm,
                 decoration: InputDecoration(
-                  labelText: "Confirm Password",
-                  border: OutlineInputBorder(),
+                  labelText: "confirm_password".tr(),
+                  border: const OutlineInputBorder(),
                   suffixIcon: IconButton(
-                    icon: Icon(
-                        obscureConfirm
-                            ? Icons.visibility
-                            : Icons.visibility_off
-                    ),
+                    icon: Icon(obscureConfirm ? Icons.visibility : Icons.visibility_off),
                     onPressed: () {
                       setState(() {
                         obscureConfirm = !obscureConfirm;
@@ -200,42 +174,31 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ),
                 ),
                 validator: (value) {
-
-                  if (value == null || value.isEmpty) {
-                    return "Confirm your password";
-                  }
-
                   if (value != passwordController.text) {
-                    return "Passwords do not match";
+                    return "confirm_error".tr();
                   }
-
                   return null;
                 },
               ),
 
-              SizedBox(height: 25),
+              const SizedBox(height: 25),
 
-              // BUTTON
               ElevatedButton(
-                child: Text("Register"),
                 onPressed: () {
-
                   if (_formKey.currentState!.validate()) {
-
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => UserInfoPage(
+                        builder: (_) => UserInfoPage(
                           name: nameController.text,
                           email: emailController.text,
                           phone: phoneController.text,
                         ),
                       ),
                     );
-
                   }
-
                 },
+                child: Text("register".tr()),
               )
             ],
           ),

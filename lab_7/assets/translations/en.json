@@ -1,0 +1,15 @@
+{
+    "registration": "Registration",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "register": "Register",
+    "user_info": "User Information",
+    "name_error": "Name cannot be empty",
+    "email_error": "Enter valid email",
+    "phone_error": "Only digits allowed",
+    "password_error": "Minimum 6 characters",
+    "confirm_error": "Passwords do not match"
+  }
